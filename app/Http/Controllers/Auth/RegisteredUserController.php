@@ -48,6 +48,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+        setcookie('__apiToken', Auth::user()->createToken('auth_token')->plainTextToken);
 
         return redirect(RouteServiceProvider::HOME);
     }

@@ -18,11 +18,14 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function () {
+        if (!isset($_COOKIE["__apiToken"])) {
+            setcookie('__apiToken', Auth::user()->createToken('auth_token')->plainTextToken);
+        }
         return view('dashboard');
     })->name('dashboard');
     Route::get('/input', [InputController::class, 'index'])->name('input.index');
